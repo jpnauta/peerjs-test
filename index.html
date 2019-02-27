@@ -1,0 +1,51 @@
+<html>
+<head>
+  <title>PeerJS Hello</title>
+</head>
+<body>
+<p>
+  Your peer id is: <span id="peerid"></span>
+</p>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.24/peerjs.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+    var peer = new Peer('abc-123')
+    var conn = peer.on("open", function (id) {
+        $("#chat").hide()
+        $("#peerid").text(id)
+    })
+
+    conn.on('open', function () {
+        console.log('open')
+    });
+    conn.on('connection', function (clientConn) {
+        console.log('connection', clientConn)
+        clientConn.send('test')
+    });
+    conn.on('disconnected', function () {
+        console.log('disconnected')
+    });
+    conn.on('close', function () {
+        console.log('close')
+    });
+    conn.on('error', function (err) {
+        console.log('error')
+    });
+    conn.on('data', function (data) {
+        console.log('data', data)
+    });
+
+    peer.on('connection', function (clientConn) {
+        clientConn.on('data', function (data) {
+            // Will print 'hi!'
+            console.log(data)
+            setTimeout(function () {
+                console.log('sending')
+                clientConn.send('test2')
+            }, 1000)
+        })
+    })
+</script>
+</html>

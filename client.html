@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>PeerJS Hello</title>
+</head>
+<body>
+<p>
+  Your peer id is: <span id="peerid"></span>
+</p>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.24/peerjs.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+    var peer = new Peer(null)
+    peer.on("open", function (id) {
+        $("#peerid").text(id)
+        var conn = peer.connect('abc-123')
+
+        conn.on('open', function (id) {
+            console.log('open', conn)
+            conn.send('test');
+        });
+        conn.on('connection', function (c) {
+            console.log('connection')
+        });
+        conn.on('disconnected', function () {
+            console.log('disconnected')
+        });
+        conn.on('close', function () {
+            console.log('close')
+        });
+        conn.on('error', function (err) {
+            console.log('error')
+        });
+
+        conn.on('data', function (data) {
+            // Will print 'hi!'
+            console.log(data)
+        })
+    })
+
+</script>
+</html>
